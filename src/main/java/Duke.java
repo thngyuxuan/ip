@@ -14,14 +14,14 @@ public class Duke {
         System.out.println("\n");
 
         Scanner sc = new Scanner(System.in);
-        while(1) {
+        while(true) {
             String input = sc.nextLine();
-            if(input == "bye") {
+            if(input.equals("bye")) {
+                System.out.println("Bye. Hope to see you again soon!");
                 break;
             } else {
                 System.out.println(input);
             }
         }
-        System.out.println("Bye. Hope to see you again soon!");
     }
 }
