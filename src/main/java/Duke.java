@@ -1,4 +1,4 @@
-import java.util.*;
+import java.util.Scanner;
 
 public class Duke {
     public static void main(String[] args) {
@@ -8,7 +8,7 @@ public class Duke {
                 + "| |_| | |_| |   <  __/\n"
                 + "|____/ \\__,_|_|\\_\\___|\n";
         System.out.println("Hello from\n" + logo);
-
+        // Greeting Message
         System.out.println("Hello, I'm Duke!");
         System.out.println("What can I do for you?");
         System.out.println("\n");
@@ -35,14 +35,17 @@ public class Duke {
                 // Split into words to check whether done command is given
                 String[] words = input.split(" ");
                 if(words[0].equals("done")) {
-                    if(words[1] == null) {
+                    // Check if invalid done command is given
+                    if(words.length < 2) {
                         System.out.println("Invalid command!");
+                    } else {
+                        int doneTask = Integer.parseInt(words[1]) - 1;
+                        list[doneTask].markAsDone();
+                        System.out.println("Nice! I've marked this task as done:");
+                        list[doneTask].printTask();
                     }
-                    int doneTask = Integer.parseInt(words[1]) - 1;
-                    list[doneTask].markAsDone();
-                    System.out.println("Nice! I've marked this task as done:");
-                    list[doneTask].printTask();
                 } else {
+                    // Echo input by user
                     System.out.println(input);
                     Task t = new Task(input);
                     list[inputs] = t;
