@@ -11,46 +11,68 @@ public class Duke {
         // Greeting Message
         System.out.println("Hello, I'm Duke!");
         System.out.println("What can I do for you?");
-        System.out.println("\n");
 
         Scanner sc = new Scanner(System.in);
         int inputs = 0;
         Task[] list = new Task[100];
         while(true) {
-            String input = sc.nextLine();
+            String input = sc.next();
             // Exit Command
             if(input.equals("bye")) {
                 System.out.println("Bye. Hope to see you again soon!");
                 break;
             }
-            // List Command
-            else if(input.equals("list")) {
-                System.out.println("Here are the tasks in your list:");
-                for(int i = 0;i < inputs; i++) {
-                    System.out.print((i+1) + ". ");
-                    list[i].printTask();
-                }
-            }
             else {
-                // Split into words to check whether done command is given
-                String[] words = input.split(" ");
-                if(words[0].equals("done")) {
-                    // Check if invalid done command is given
-                    if(words.length < 2) {
-                        System.out.println("Invalid command!");
-                    } else {
-                        int doneTask = Integer.parseInt(words[1]) - 1;
-                        list[doneTask].markAsDone();
-                        System.out.println("Nice! I've marked this task as done:");
-                        list[doneTask].printTask();
+                // Check for other commands
+                switch(input) {
+                case ("list"):
+                    System.out.println("Here are the tasks in your list:");
+                    for(int i = 0;i < inputs; i++) {
+                        System.out.print((i+1) + ".");
+                        System.out.println(list[i].toString());
                     }
-                } else {
-                    // Echo input by user
-                    System.out.println(input);
-                    Task t = new Task(input);
-                    list[inputs] = t;
+                    break;
+
+                case ("done"):
+                    int done = sc.nextInt();
+                    list[done - 1].markAsDone();
+                    System.out.println("Nice! I've marked this task as done:");
+                    System.out.println(list[done - 1].toString());
+                    break;
+
+                case ("todo"):
+                    String description = sc.nextLine();
+                    list[inputs] = new ToDo(description);
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println(list[inputs].toString());
+                    System.out.println("Now you have " + (inputs + 1) + " tasks in the list.");
                     inputs++;
+                    break;
+
+                case ("deadline"):
+                    String desc = sc.nextLine();
+                    String[] splitDesc = desc.split("/by");
+                    list[inputs] = new Deadline(splitDesc[0], splitDesc[1]);
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println(list[inputs].toString());
+                    System.out.println("Now you have " + (inputs + 1) + " tasks in the list.");
+                    inputs++;
+                    break;
+
+                case ("event"):
+                    String event = sc.nextLine();
+                    String[] splitEvent = event.split("/at");
+                    list[inputs] = new Event(splitEvent[0],splitEvent[1]);
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println(list[inputs].toString());
+                    System.out.println("Now you have " + (inputs + 1) + " tasks in the list.");
+                    inputs++;
+                    break;
+                default:
+                    System.out.println("Please specify your task type!");
+                    break;
                 }
+
             }
         }
     }
