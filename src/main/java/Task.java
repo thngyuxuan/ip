@@ -15,7 +15,8 @@ public class Task {
         this.isDone = true;
     }
 
-    public void printTask() {
-        System.out.println("[" + this.getStatusIcon() + "] " + this.description);
+    @Override
+    public String toString() {
+        return "[" + this.getStatusIcon() + "]" + this.description;
     }
 }
