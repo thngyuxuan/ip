@@ -1,9 +1,13 @@
-import java.lang.reflect.Array;
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Duke {
+    // Maximum number of tasks
+    final static int MAX_TASKS = 100;
+    // Initialize array of tasks
+    public static Task[] list = new Task[MAX_TASKS];
+    // Keep track of number of existing tasks in list
+    public static int inputCount = 0;
+    // Print greeting message upon startup of program
     public static void printGreeting() {
         String logo = " ____        _        \n"
                 + "|  _ \\ _   _| | _____ \n"
@@ -15,15 +19,93 @@ public class Duke {
         System.out.println("Hello, I'm Duke!");
         System.out.println("What can I do for you?");
     }
+    // Function to label task as done
+    public static void doneTask(String task) throws NumberFormatException {
+        try {
+            int doneTask = Integer.parseInt(task.replaceAll("[\\D]",""));
+            list[doneTask - 1].markAsDone();
+            System.out.println("______________________________________________");
+            System.out.println("Done. I have marked this task as done:");
+            System.out.println("   " + list[doneTask - 1].toString());
+            System.out.println("______________________________________________");
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Did not specify which task is completed!");
+        }
+    }
+    // Function to list all tasks stored
+    public static void listTasks() {
+        System.out.println("Here are the tasks in your list:");
+        System.out.println("______________________________________________");
+        for(int i = 0; i < inputCount; i++) {
+            System.out.println((i+1) + "." + list[i].toString());
+        }
+        System.out.println("______________________________________________");
+    }
+
+    public static void deleteTask(String delete) throws NumberFormatException, NullPointerException, ArrayIndexOutOfBoundsException {
+        try {
+            int toDelete = Integer.parseInt(delete.replaceAll("[\\D]", ""));
+            toDelete--;
+            String toPrint = list[toDelete].toString();
+            System.out.println("______________________________________________");
+            System.out.println("Noted. I've removed this task:");
+            System.out.println("   " + toPrint);
+            Task[] newList = new Task[MAX_TASKS];
+            for (int i = 0, j = 0; i < inputCount; i++) {
+                if (i == toDelete) {
+                    continue;
+                }
+                newList[j++] = list[i];
+            }
+            inputCount--;
+            list = newList;
+            System.out.println("Now you have " + inputCount + " tasks in the list.");
+            System.out.println("______________________________________________");
+        } catch (NumberFormatException e) {
+            System.out.println("Error: Did not specify which task to delete!");
+        } catch (NullPointerException e) {
+            System.out.println("Error: Task does not exist!");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Error: Invalid number!");
+        }
+    }
+
+    public static void addToDo(String description) {
+        list[inputCount] = new ToDo(description);
+        System.out.println("______________________________________________");
+        System.out.println("Got it. I've added this task:");
+        System.out.println("   " + list[inputCount].toString());
+        System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
+        System.out.println("______________________________________________");
+        inputCount++;
+    }
+
+    public static void addDeadline(String desc) {
+        String[] splitDesc = desc.split("/by");
+        list[inputCount] = new Deadline(splitDesc[0], splitDesc[1]);
+        System.out.println("______________________________________________");
+        System.out.println("Got it. I've added this task:");
+        System.out.println(list[inputCount].toString());
+        System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
+        System.out.println("______________________________________________");
+        inputCount++;
+    }
+
+    public static void addEvent(String event) {
+        String[] splitEvent = event.split("/at");
+        list[inputCount] = new Event(splitEvent[0],splitEvent[1]);
+        System.out.println("______________________________________________");
+        System.out.println("Got it. I've added this task:");
+        System.out.println(list[inputCount].toString());
+        System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
+        System.out.println("______________________________________________");
+        inputCount++;
+    }
 
     public static void main(String[] args) {
-        final int MAX_TASKS = 100;
         printGreeting();
 
         Scanner sc = new Scanner(System.in);
-        int inputCount = 0;
-        Task[] list = new Task[MAX_TASKS];
-
         while(true) {
             String input = sc.next();
             // Exit Command
@@ -35,52 +117,39 @@ public class Duke {
                 // Check for other commands
                 switch(input) {
                 case ("list"):
-                    System.out.println("Here are the tasks in your list:");
-                    for(int i = 0;i < inputCount; i++) {
-                        System.out.print((i+1) + ".");
-                        System.out.println(list[i].toString());
-                    }
+                    listTasks();
                     break;
 
                 case ("done"):
-                    try {
-                        String done = sc.nextLine();
-                        int doneTask = Integer.parseInt(done);
-                        list[doneTask - 1].markAsDone();
-                        System.out.println(list[doneTask - 1].toString());
-                    } catch (NumberFormatException e) {
-                        System.out.println("Error: Did not specify which task is completed!");
-                    }
+                    String done = sc.nextLine();
+                    doneTask(done);
+                    break;
+
+                case ("delete"):
+                    String delete = sc.nextLine();
+                    deleteTask(delete);
                     break;
 
                 case ("todo"):
+                    String description = sc.nextLine();
+                    // Throw exception if description is empty
                     try {
-                        String description = sc.nextLine();
-                        if(description.equals("")) {
+                        if (description.equals("")) {
                             throw new DukeException();
                         }
-                        list[inputCount] = new ToDo(description);
-                        System.out.println("Got it. I've added this task:");
-                        System.out.println(list[inputCount].toString());
-                        System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
-                        inputCount++;
+                        addToDo(description);
                     } catch (DukeException e) {
-                        System.out.println("Error: Did not specify todo task!");
+                        System.out.println("Error: Did not specify todo description!");
                     }
                     break;
 
                 case ("deadline"):
+                    String desc = sc.nextLine();
                     try {
-                        String desc = sc.nextLine();
                         if(desc.equals("")) {
                             throw new DukeException();
                         }
-                        String[] splitDesc = desc.split("/by");
-                        list[inputCount] = new Deadline(splitDesc[0], splitDesc[1]);
-                        System.out.println("Got it. I've added this task:");
-                        System.out.println(list[inputCount].toString());
-                        System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
-                        inputCount++;
+                        addDeadline(desc);
                     } catch (ArrayIndexOutOfBoundsException e) {
                         System.out.println("Error: Did not specify deadline correctly!");
                     } catch (DukeException e) {
@@ -89,17 +158,12 @@ public class Duke {
                     break;
 
                 case ("event"):
+                    String event = sc.nextLine();
                     try {
-                        String event = sc.nextLine();
                         if(event.equals("")) {
                             throw new DukeException();
                         }
-                        String[] splitEvent = event.split("/at");
-                        list[inputCount] = new Event(splitEvent[0],splitEvent[1]);
-                        System.out.println("Got it. I've added this task:");
-                        System.out.println(list[inputCount].toString());
-                        System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
-                        inputCount++;
+                        addEvent(event);
                     } catch (ArrayIndexOutOfBoundsException e) {
                         System.out.println("Error: Did not specify event correctly!");
                     } catch (DukeException e) {
@@ -108,6 +172,7 @@ public class Duke {
                     break;
 
                 default:
+                    sc.nextLine();
                     System.out.println("Please specify task type!");
                 }
             }
