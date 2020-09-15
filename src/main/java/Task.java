@@ -1,12 +1,11 @@
 import java.util.NoSuchElementException;
 
-public class Task {
+public abstract class Task {
     protected String description;
-    protected Boolean isDone;
+    protected Boolean isDone = false;
 
     public Task(String description) {
         this.description = description;
-        this.isDone = false;
     }
 
     public String getStatusIcon() {
@@ -16,6 +15,8 @@ public class Task {
     public void markAsDone() {
         this.isDone = true;
     }
+
+    public abstract String getType();
 
     @Override
     public String toString() {

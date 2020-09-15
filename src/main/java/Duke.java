@@ -1,4 +1,8 @@
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Duke {
     // Maximum number of tasks
@@ -7,6 +11,8 @@ public class Duke {
     public static Task[] list = new Task[MAX_TASKS];
     // Keep track of number of existing tasks in list
     public static int inputCount = 0;
+    // FilePath
+    public static String filePath = "src\\main\\java\\duke.txt";
     // Print greeting message upon startup of program
     public static void printGreeting() {
         String logo = " ____        _        \n"
@@ -80,6 +86,11 @@ public class Duke {
         inputCount++;
     }
 
+    public static void loadToDo(String description) {
+        list[inputCount] = new ToDo(description);
+        inputCount++;
+    }
+
     public static void addDeadline(String desc) {
         String[] splitDesc = desc.split("/by");
         list[inputCount] = new Deadline(splitDesc[0], splitDesc[1]);
@@ -88,6 +99,12 @@ public class Duke {
         System.out.println(list[inputCount].toString());
         System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
         System.out.println("______________________________________________");
+        inputCount++;
+    }
+
+    public static void loadDeadline(String desc) {
+        String[] splitDesc = desc.split("/by");
+        list[inputCount] = new Deadline(splitDesc[0], splitDesc[1]);
         inputCount++;
     }
 
@@ -102,7 +119,71 @@ public class Duke {
         inputCount++;
     }
 
+    public static void loadEvent(String event) {
+        String[] splitEvent = event.split("/at");
+        list[inputCount] = new Event(splitEvent[0],splitEvent[1]);
+        inputCount++;
+    }
+
+    public static String toSave(Task t) {
+        return(t.getType() + " > " + t.isDone + " > " + t.description);
+    }
+
+    private static void writeToFile(String filePath, String textToAdd) throws IOException {
+        FileWriter fw  = new FileWriter(filePath);
+        fw.write(textToAdd);
+        fw.close();
+    }
+
+    private static void loadFileContents(String filePath) throws FileNotFoundException {
+        File f = new File(filePath);
+        Scanner sc = new Scanner(f);
+        if(!sc.hasNext()) {
+            inputCount = 0;
+        } else {
+            int inputCount = Integer.parseInt(sc.nextLine());
+            for (int i = 0; i < inputCount; i++) {
+                String taskLine = sc.nextLine();
+                String[] taskDetails = taskLine.split(" > ");
+                if (taskDetails[0].equals("E")) {
+                    loadEvent(taskDetails[2]);
+                    list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
+                }
+                if (taskDetails[0].equals("T")) {
+                    loadToDo(taskDetails[2]);
+                    list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
+                }
+                if (taskDetails[0].equals("D")) {
+                    loadDeadline(taskDetails[2]);
+                    list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
+                }
+            }
+        }
+    }
+
+    public static void saveFileContents(String filePath) {
+        try {
+            FileWriter fw = new FileWriter(filePath);
+            fw.write(Integer.toString(inputCount));
+            fw.write(System.lineSeparator());
+            for(int i = 0; i < inputCount; i++) {
+                fw.write(toSave(list[i]));
+                fw.write(System.lineSeparator());
+            }
+            fw.close();
+            System.out.println("File saved successfully.");
+        } catch (IOException e) {
+            System.out.println("Error: File not found! (IOException)");
+        }
+    }
+
     public static void main(String[] args) {
+        // Load file
+        try {
+            loadFileContents(filePath);
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found!");
+        }
         printGreeting();
 
         Scanner sc = new Scanner(System.in);
@@ -110,6 +191,7 @@ public class Duke {
             String input = sc.next();
             // Exit Command
             if(input.equals("bye")) {
+                saveFileContents(filePath);
                 System.out.println("Bye. Hope to see you again soon!");
                 break;
             }
