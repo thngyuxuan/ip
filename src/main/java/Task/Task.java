@@ -1,8 +1,8 @@
-import java.util.NoSuchElementException;
+package Task;
 
 public abstract class Task {
     protected String description;
-    protected Boolean isDone = false;
+    public Boolean isDone = false;
 
     public Task(String description) {
         this.description = description;
