@@ -86,8 +86,8 @@ public class Duke {
         inputCount++;
     }
 
-    public static void loadToDo(String description) {
-        list[inputCount] = new ToDo(description);
+    public static void loadToDo(int i, String description) {
+        list[i] = new ToDo(description);
         inputCount++;
     }
 
@@ -96,15 +96,15 @@ public class Duke {
         list[inputCount] = new Deadline(splitDesc[0], splitDesc[1]);
         System.out.println("______________________________________________");
         System.out.println("Got it. I've added this task:");
-        System.out.println(list[inputCount].toString());
+        System.out.println("   " + list[inputCount].toString());
         System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
         System.out.println("______________________________________________");
         inputCount++;
     }
 
-    public static void loadDeadline(String desc) {
+    public static void loadDeadline(int i,String desc) {
         String[] splitDesc = desc.split("/by");
-        list[inputCount] = new Deadline(splitDesc[0], splitDesc[1]);
+        list[i] = new Deadline(splitDesc[0], splitDesc[1]);
         inputCount++;
     }
 
@@ -119,20 +119,14 @@ public class Duke {
         inputCount++;
     }
 
-    public static void loadEvent(String event) {
+    public static void loadEvent(int i, String event) {
         String[] splitEvent = event.split("/at");
-        list[inputCount] = new Event(splitEvent[0],splitEvent[1]);
+        list[i] = new Event(splitEvent[0],splitEvent[1]);
         inputCount++;
     }
 
     public static String toSave(Task t) {
-        return(t.getType() + " > " + t.isDone + " > " + t.description);
-    }
-
-    private static void writeToFile(String filePath, String textToAdd) throws IOException {
-        FileWriter fw  = new FileWriter(filePath);
-        fw.write(textToAdd);
-        fw.close();
+        return(t.getType() + " > " + t.isDone() + " > " + t.toStringToSave());
     }
 
     private static void loadFileContents(String filePath) throws FileNotFoundException {
@@ -146,15 +140,15 @@ public class Duke {
                 String taskLine = sc.nextLine();
                 String[] taskDetails = taskLine.split(" > ");
                 if (taskDetails[0].equals("E")) {
-                    loadEvent(taskDetails[2]);
+                    loadEvent(i,taskDetails[2]);
                     list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
                 }
                 if (taskDetails[0].equals("T")) {
-                    loadToDo(taskDetails[2]);
+                    loadToDo(i,taskDetails[2]);
                     list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
                 }
                 if (taskDetails[0].equals("D")) {
-                    loadDeadline(taskDetails[2]);
+                    loadDeadline(i,taskDetails[2]);
                     list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
                 }
             }
@@ -164,6 +158,7 @@ public class Duke {
     public static void saveFileContents(String filePath) {
         try {
             FileWriter fw = new FileWriter(filePath);
+            // Write inputCount to first line of file
             fw.write(Integer.toString(inputCount));
             fw.write(System.lineSeparator());
             for(int i = 0; i < inputCount; i++) {
