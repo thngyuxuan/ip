@@ -25,9 +25,11 @@ public class Duke {
     public static final String INVALID_EVENT_INPUT = "Error! Did not specify event correctly! (Command format: event <description> /at <input>)";
     public static final String EMPTY_EVENT_INPUT = "Error! Did not specify event! (Command format: event <description> /at <input>)";
     public static final String INVALID_DELETE_INPUT_FORMAT = "Error! Please check that you have input only numbers. (Command format: delete <Task Number>)";
-    public static final String INVALID_DELETE_INPUT_OUT_OF_BOUNDS = "Error! Please check that you have input only numbers. (Command format: delete <Task Number>)";
-    public static final String EMPTY_DELETE_INPUT = "Error! Task does not exist. Please check if task exists in list. (Use 'list' command to find out existing tasks)";
-    public static final String INVALID_DONE_INPUT = "Error: Did not specify which task is completed! (Command format: done <Task Number>)";
+    public static final String INVALID_DELETE_INPUT_OUT_OF_BOUNDS = "Error! Please check that you have input only numbers. (Command format: delete <Task Number from 1 to 100>)";
+    public static final String EMPTY_DELETE_INPUT = "Error! Task does not exist! Please check if task exists in list. (Use 'list' command to find out existing tasks)";
+    public static final String INVALID_DONE_INPUT = "Error! Did not specify which task is completed! (Command format: done <Task Number>)";
+    public static final String EMPTY_DONE_INPUT = "Error! Task does not exist! Please check if task exists in list. (Use 'list' command to find out existing tasks)";
+    public static final String INVALID_DONE_INPUT_OUT_OF_BOUNDS = "Error! Please check that you have input only numbers. (Command format: done <Task Number from 1 to 100>)";
 
     public static final String LIST_TASKS_MESSAGE = "Here are the tasks in your list:";
     public static final String ADDED_TASK_MESSAGE = "Got it. I've added this task:";
@@ -54,7 +56,7 @@ public class Duke {
         System.out.println(EXIT_MESSAGE);
     }
     // Label task as done
-    public static void doneTask(String task) throws NumberFormatException {
+    public static void doneTask(String task) throws NumberFormatException, NullPointerException, ArrayIndexOutOfBoundsException {
         try {
             int doneTask = Integer.parseInt(task.replaceAll("[\\D]",""));
             list[doneTask - 1].markAsDone();
@@ -64,6 +66,10 @@ public class Duke {
             System.out.println(BORDER);
         } catch (NumberFormatException e) {
             System.out.println(INVALID_DONE_INPUT);
+        } catch (NullPointerException e) {
+            System.out.println(EMPTY_DONE_INPUT);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println(INVALID_DONE_INPUT_OUT_OF_BOUNDS);
         }
     }
     // List all tasks stored
