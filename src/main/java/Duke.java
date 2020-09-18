@@ -13,7 +13,30 @@ public class Duke {
     // Keep track of number of existing tasks in list
     public static int inputCount = 0;
     // FilePath
-    public static String filePath = "src\\main\\java\\duke.txt";
+    public static String filePath = "duke.txt";
+    // String constants in program
+    public static final String BORDER = "______________________________________________";
+    public static final String INDENTATION = "   ";
+
+    public static final String INVALID_INPUT = "Please specify command! (Available commands: todo, deadline, event, bye)";
+    public static final String EMPTY_TODO_INPUT = "Error! Did not specify to-do task description! (Command format: todo <description>)";
+    public static final String INVALID_DEADLINE_INPUT = "Error! Did not specify deadline correctly! (Command format: deadline <description> /by <input>)";
+    public static final String EMPTY_DEADLINE_INPUT = "Error! Did not specify deadline! (Command format: deadline <description> /by <input>)";
+    public static final String INVALID_EVENT_INPUT = "Error! Did not specify event correctly! (Command format: event <description> /at <input>)";
+    public static final String EMPTY_EVENT_INPUT = "Error! Did not specify event! (Command format: event <description> /at <input>)";
+    public static final String INVALID_DELETE_INPUT_FORMAT = "Error! Please check that you have input only numbers. (Command format: delete <Task Number>)";
+    public static final String INVALID_DELETE_INPUT_OUT_OF_BOUNDS = "Error! Please check that you have input only numbers. (Command format: delete <Task Number>)";
+    public static final String EMPTY_DELETE_INPUT = "Error! Task does not exist. Please check if task exists in list. (Use 'list' command to find out existing tasks)";
+    public static final String INVALID_DONE_INPUT = "Error: Did not specify which task is completed! (Command format: done <Task Number>)";
+
+    public static final String LIST_TASKS_MESSAGE = "Here are the tasks in your list:";
+    public static final String ADDED_TASK_MESSAGE = "Got it. I've added this task:";
+    public static final String MARK_AS_DONE_MESSAGE = "Done. I have marked this task as done:";
+    public static final String DELETED_TASK_MESSAGE = "Noted. I've removed this task:";
+    public static final String EXIT_MESSAGE = "Goodbye! Hope to see you again soon!";
+    public static final String SAVE_SUCCESS_MESSAGE = "File saved successfully.";
+    public static final String SAVE_FAILED_MESSAGE = "Error: File not found! (IOException)";
+    public static final String MISSING_FILE_MESSAGE = "Error: File not found!";
     // Print greeting message upon startup of program
     public static void printGreeting() {
         String logo = " ____        _        \n"
@@ -26,37 +49,41 @@ public class Duke {
         System.out.println("Hello, I'm Duke!");
         System.out.println("What can I do for you?");
     }
-    // Function to label task as done
+    // Print goodbye message upon exiting
+    public static void printGoodbye() {
+        System.out.println(EXIT_MESSAGE);
+    }
+    // Label task as done
     public static void doneTask(String task) throws NumberFormatException {
         try {
             int doneTask = Integer.parseInt(task.replaceAll("[\\D]",""));
             list[doneTask - 1].markAsDone();
-            System.out.println("______________________________________________");
-            System.out.println("Done. I have marked this task as done:");
-            System.out.println("   " + list[doneTask - 1].toString());
-            System.out.println("______________________________________________");
+            System.out.println(BORDER);
+            System.out.println(MARK_AS_DONE_MESSAGE);
+            System.out.println(INDENTATION + list[doneTask - 1].toString());
+            System.out.println(BORDER);
         } catch (NumberFormatException e) {
-            System.out.println("Error: Did not specify which task is completed!");
+            System.out.println(INVALID_DONE_INPUT);
         }
     }
-    // Function to list all tasks stored
+    // List all tasks stored
     public static void listTasks() {
-        System.out.println("Here are the tasks in your list:");
-        System.out.println("______________________________________________");
+        System.out.println(LIST_TASKS_MESSAGE);
+        System.out.println(BORDER);
         for(int i = 0; i < inputCount; i++) {
             System.out.println((i+1) + "." + list[i].toString());
         }
-        System.out.println("______________________________________________");
+        System.out.println(BORDER);
     }
-
-    public static void deleteTask(String delete) throws NumberFormatException, NullPointerException, ArrayIndexOutOfBoundsException {
+    // Delete the selected task
+    public static void deleteTask(String indexToDelete) throws NumberFormatException, NullPointerException, ArrayIndexOutOfBoundsException {
         try {
-            int toDelete = Integer.parseInt(delete.replaceAll("[\\D]", ""));
+            int toDelete = Integer.parseInt(indexToDelete.replaceAll("[\\D]", ""));
             toDelete--;
             String toPrint = list[toDelete].toString();
-            System.out.println("______________________________________________");
-            System.out.println("Noted. I've removed this task:");
-            System.out.println("   " + toPrint);
+            System.out.println(BORDER);
+            System.out.println(DELETED_TASK_MESSAGE);
+            System.out.println(INDENTATION + toPrint);
             Task[] newList = new Task[MAX_TASKS];
             for (int i = 0, j = 0; i < inputCount; i++) {
                 if (i == toDelete) {
@@ -67,69 +94,69 @@ public class Duke {
             inputCount--;
             list = newList;
             System.out.println("Now you have " + inputCount + " tasks in the list.");
-            System.out.println("______________________________________________");
+            System.out.println(BORDER);
         } catch (NumberFormatException e) {
-            System.out.println("Error: Did not specify which task to delete!");
+            System.out.println(INVALID_DELETE_INPUT_FORMAT);
         } catch (NullPointerException e) {
-            System.out.println("Error: Task does not exist!");
+            System.out.println(EMPTY_DELETE_INPUT);
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Error: Invalid number!");
+            System.out.println(INVALID_DELETE_INPUT_OUT_OF_BOUNDS);
         }
     }
-
+    // Add todo task from user input
     public static void addToDo(String description) {
         list[inputCount] = new ToDo(description);
-        System.out.println("______________________________________________");
-        System.out.println("Got it. I've added this task:");
-        System.out.println("   " + list[inputCount].toString());
+        System.out.println(BORDER);
+        System.out.println(ADDED_TASK_MESSAGE);
+        System.out.println(INDENTATION + list[inputCount].toString());
         System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
-        System.out.println("______________________________________________");
+        System.out.println(BORDER);
         inputCount++;
     }
-
+    // Load todo from text file
     public static void loadToDo(int i, String description) {
         list[i] = new ToDo(description);
         inputCount++;
     }
-
+    // Add deadline from user input
     public static void addDeadline(String desc) {
         String[] splitDesc = desc.split("/by");
         list[inputCount] = new Deadline(splitDesc[0], splitDesc[1]);
-        System.out.println("______________________________________________");
-        System.out.println("Got it. I've added this task:");
-        System.out.println("   " + list[inputCount].toString());
+        System.out.println(BORDER);
+        System.out.println(ADDED_TASK_MESSAGE);
+        System.out.println(INDENTATION + list[inputCount].toString());
         System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
-        System.out.println("______________________________________________");
+        System.out.println(BORDER);
         inputCount++;
     }
-
+    // Load deadline from text file
     public static void loadDeadline(int i,String desc) {
         String[] splitDesc = desc.split("/by");
         list[i] = new Deadline(splitDesc[0], splitDesc[1]);
         inputCount++;
     }
-
+    // Add event from user input
     public static void addEvent(String event) {
         String[] splitEvent = event.split("/at");
         list[inputCount] = new Event(splitEvent[0],splitEvent[1]);
-        System.out.println("______________________________________________");
-        System.out.println("Got it. I've added this task:");
+        System.out.println(BORDER);
+        System.out.println(ADDED_TASK_MESSAGE);
         System.out.println(list[inputCount].toString());
         System.out.println("Now you have " + (inputCount + 1) + " tasks in the list.");
-        System.out.println("______________________________________________");
+        System.out.println(BORDER);
         inputCount++;
     }
-
+    // Load event from text file
     public static void loadEvent(int i, String event) {
         String[] splitEvent = event.split("/at");
         list[i] = new Event(splitEvent[0],splitEvent[1]);
         inputCount++;
     }
-
+    // Format task details to save in text file
     public static String toSave(Task t) {
-        return(t.getType() + " > " + t.isDone() + " > " + t.toStringToSave());
+        return(t.getType() + " > " + t.isDone + " > " + t.toStringToSave());
     }
-
+    // Load text file contents into program
     private static void loadFileContents(String filePath) throws FileNotFoundException {
         File f = new File(filePath);
         Scanner sc = new Scanner(f);
@@ -139,23 +166,28 @@ public class Duke {
             int inputCount = Integer.parseInt(sc.nextLine());
             for (int i = 0; i < inputCount; i++) {
                 String taskLine = sc.nextLine();
+                // Split the task details into type, isDone, and description
                 String[] taskDetails = taskLine.split(" > ");
-                if (taskDetails[0].equals("E")) {
-                    loadEvent(i,taskDetails[2]);
-                    list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
-                }
-                if (taskDetails[0].equals("T")) {
-                    loadToDo(i,taskDetails[2]);
-                    list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
-                }
-                if (taskDetails[0].equals("D")) {
-                    loadDeadline(i,taskDetails[2]);
-                    list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
+                // Load each existing task in text file into the program
+                switch(taskDetails[0]) {
+                    case "E":
+                        loadEvent(i,taskDetails[2]);
+                        list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
+                        break;
+                    case "T":
+                        loadToDo(i,taskDetails[2]);
+                        list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
+                        break;
+                    case "D":
+                        loadDeadline(i,taskDetails[2]);
+                        list[i].isDone = Boolean.parseBoolean(taskDetails[1]);
+                        break;
+
                 }
             }
         }
     }
-
+    // Save contents in program into text file
     public static void saveFileContents(String filePath) {
         try {
             FileWriter fw = new FileWriter(filePath);
@@ -167,9 +199,9 @@ public class Duke {
                 fw.write(System.lineSeparator());
             }
             fw.close();
-            System.out.println("File saved successfully.");
+            System.out.println(SAVE_SUCCESS_MESSAGE);
         } catch (IOException e) {
-            System.out.println("Error: File not found! (IOException)");
+            System.out.println(SAVE_FAILED_MESSAGE);
         }
     }
 
@@ -178,7 +210,7 @@ public class Duke {
         try {
             loadFileContents(filePath);
         } catch (FileNotFoundException e) {
-            System.out.println("File not found!");
+            System.out.println(MISSING_FILE_MESSAGE);
         }
         printGreeting();
 
@@ -188,7 +220,7 @@ public class Duke {
             // Exit Command
             if(input.equals("bye")) {
                 saveFileContents(filePath);
-                System.out.println("Bye. Hope to see you again soon!");
+                printGoodbye();
                 break;
             }
             else {
@@ -217,7 +249,7 @@ public class Duke {
                         }
                         addToDo(description);
                     } catch (DukeException e) {
-                        System.out.println("Error: Did not specify todo description!");
+                        System.out.println(EMPTY_TODO_INPUT);
                     }
                     break;
 
@@ -229,9 +261,9 @@ public class Duke {
                         }
                         addDeadline(desc);
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        System.out.println("Error: Did not specify deadline correctly!");
+                        System.out.println(INVALID_DEADLINE_INPUT);
                     } catch (DukeException e) {
-                        System.out.println("Error: Did not specify deadline!");
+                        System.out.println(EMPTY_DEADLINE_INPUT);
                     }
                     break;
 
@@ -243,15 +275,15 @@ public class Duke {
                         }
                         addEvent(event);
                     } catch (ArrayIndexOutOfBoundsException e) {
-                        System.out.println("Error: Did not specify event correctly!");
+                        System.out.println(INVALID_EVENT_INPUT);
                     } catch (DukeException e) {
-                        System.out.println("Error: Did not specify event!");
+                        System.out.println(EMPTY_EVENT_INPUT);
                     }
                     break;
 
                 default:
                     sc.nextLine();
-                    System.out.println("Please specify task type!");
+                    System.out.println(INVALID_INPUT);
                 }
             }
         }

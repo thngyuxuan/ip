@@ -1,10 +1,10 @@
 package Task;
 
 public class Event extends Task {
-    protected String timings;
+    protected String timing;
     public Event(String description, String timings) {
         super(description);
-        this.timings = timings;
+        this.timing = timings;
     }
 
     public String getType() {
@@ -13,10 +13,10 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + "(at:" + timings + ")";
+        return "[E]" + super.toString() + "(at:" + timing + ")";
     }
 
     public String toStringToSave() {
-        return description + "/at" + timings;
+        return description + "/at" + timing;
     }
 }
