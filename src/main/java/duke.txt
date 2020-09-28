@@ -1,2 +1,4 @@
-1
+3
 T > true >  this and that
+T > false >  this
+D > true >  this /by next week
