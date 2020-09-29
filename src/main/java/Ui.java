@@ -45,5 +45,49 @@ public class Ui {
     public static void printMissingFile() {
         System.out.println(Messages.MISSING_FILE_MESSAGE);
     }
+
+    public static void findTaskMessages() {
+        System.out.println(Messages.BORDER);
+        System.out.println(Messages.FIND_TASK_MESSAGE);
+        System.out.println(Messages.BORDER);
+
+    }
+
+    public static void markDoneMessages(String task) {
+        System.out.println(Messages.BORDER);
+        System.out.println(Messages.MARK_AS_DONE_MESSAGE);
+        System.out.println(Messages.INDENTATION + task.toString());
+        System.out.println(Messages.BORDER);
+    }
+
+    // Prints error messages for invalid user input
+    public static void printInvalidInput(String type) {
+        switch(type) {
+        case "done":
+            System.out.println(Messages.INVALID_DONE_INPUT);
+        case "doneOOB":
+            System.out.println(Messages.INVALID_DONE_INPUT_OUT_OF_BOUNDS);
+        case "delete":
+            System.out.println(Messages.INVALID_DELETE_INPUT_FORMAT);
+        case "deleteOOB":
+            System.out.println(Messages.INVALID_DELETE_INPUT_OUT_OF_BOUNDS);
+        }
+    }
+
+    // Prints error messages for empty user input
+    public static void printEmptyInput(String type) {
+        switch(type) {
+        case "done":
+            System.out.println(Messages.EMPTY_DONE_INPUT);
+        case "delete":
+            System.out.println(Messages.EMPTY_DELETE_INPUT);
+        case "find":
+            System.out.println(Messages.EMPTY_FIND_INPUT);
+        }
+    }
+
+    public static void printEmptySearchList() {
+        System.out.println(Messages.EMPTY_FIND_LIST);
+    }
 }
 

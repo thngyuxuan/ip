@@ -35,17 +35,15 @@ public class TaskList {
     public static void doneTask(String task) throws NumberFormatException, NullPointerException, ArrayIndexOutOfBoundsException {
         try {
             int doneTask = Integer.parseInt(task.replaceAll("[\\D]",""));
-            list.get(doneTask - 1).markAsDone();
-            System.out.println(Messages.BORDER);
-            System.out.println(Messages.MARK_AS_DONE_MESSAGE);
-            System.out.println(Messages.INDENTATION + list.get(doneTask - 1).toString());
-            System.out.println(Messages.BORDER);
+            Task markedDone = list.get(doneTask - 1);
+            markedDone.markAsDone();
+            Ui.markDoneMessages(markedDone.toString());
         } catch (NumberFormatException e) {
-            System.out.println(Messages.INVALID_DONE_INPUT);
+            Ui.printInvalidInput("done");
         } catch (NullPointerException e) {
-            System.out.println(Messages.EMPTY_DONE_INPUT);
+            Ui.printEmptyInput("done");
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(Messages.INVALID_DONE_INPUT_OUT_OF_BOUNDS);
+            Ui.printInvalidInput("doneOOB");
         }
     }
 
@@ -60,11 +58,32 @@ public class TaskList {
             Ui.deleteTaskMessages(toPrint);
             list.remove(toRemove);
         } catch (NumberFormatException e) {
-            System.out.println(Messages.INVALID_DELETE_INPUT_FORMAT);
+            Ui.printInvalidInput("delete");
         } catch (NullPointerException e) {
-            System.out.println(Messages.EMPTY_DELETE_INPUT);
+            Ui.printEmptyInput("delete");
         } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println(Messages.INVALID_DELETE_INPUT_OUT_OF_BOUNDS);
+            Ui.printInvalidInput("deleteOOB");
+        }
+    }
+
+    public static void findTask(String toFind) {
+        ArrayList<Task> searchList = new ArrayList<>();
+        for(int i = 0; i < list.size(); i++) {
+            if(list.get(i).getDescription().contains(toFind)) {
+                searchList.add(list.get(i));
+            }
+        }
+        if(searchList.size() == 0) {
+            Ui.printEmptySearchList();
+        }
+        else if(toFind.equals("")) {
+            Ui.printEmptyInput("find");
+        } else {
+            Ui.findTaskMessages();
+            for (int j = 0; j < searchList.size(); j++) {
+                System.out.println((j + 1) + "." + searchList.get(j).toString());
+            }
+            System.out.println(Messages.BORDER);
         }
     }
 }
