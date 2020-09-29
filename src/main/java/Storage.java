@@ -3,17 +3,36 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
-import Task.*;
+import task.*;
 
 public class Storage {
-    // Load to-do from text file
+    /**
+     * Loads a task of To-do type from text file.
+     * The argument description provides a description
+     * of the to-do task which is being loaded
+     * from the text file.
+     *
+     * @param description a string giving the details
+     *                    of the to-do task which is being
+     *                    loaded from the text file
+     */
     public static void loadToDo(String description) {
         Task toAdd = new ToDo(description);
         TaskList.list.add(toAdd);
         TaskList.inputCount++;
     }
 
-    // Load event from text file
+    /**
+     * Loads a task of Event type from text file.
+     * The argument event provides a description
+     * of the event task, as well as the event
+     * details that comes after the delimiter
+     * '/at'.
+     *
+     * @param event a string giving the details
+     *              of the event task which is being
+     *              loaded from the text file
+     */
     public static void loadEvent(String event) {
         String[] splitEvent = event.split("/at");
         Task toAdd = new Event(splitEvent[0],splitEvent[1]);
@@ -21,7 +40,17 @@ public class Storage {
         TaskList.inputCount++;
     }
 
-    // Load deadline from text file
+    /**
+     * Loads a task of Deadline type from text file.
+     * The argument desc provides a description
+     * of the deadline task, as well as the deadline
+     * details that comes after the delimiter
+     * '/by'.
+     *
+     * @param desc a string giving the details of the
+     *             deadline task which is being loaded
+     *             from the text file
+     */
     public static void loadDeadline(String desc) {
         String[] splitDesc = desc.split("/by");
         Task toAdd = new Deadline(splitDesc[0],splitDesc[1]);
@@ -29,7 +58,10 @@ public class Storage {
         TaskList.inputCount++;
     }
 
-    // Load text file contents into program
+    /**
+     * Loads all the contents from text file on to Duke.
+     * @throws FileNotFoundException
+     */
     public static void loadFileContents() throws FileNotFoundException {
         File f = new File(Messages.FILEPATH);
         Scanner sc = new Scanner(f);
@@ -61,11 +93,22 @@ public class Storage {
         }
     }
 
-    // Format task details to save in text file
+    /**
+     * Formats the task to the format to save in text file.
+     * Returns the formatted string to be saved in text file.
+     * The argument t is the task that is being formatted
+     * to save in text file.
+     * @param t a Task that is being formatted to save in textfile
+     * @return the string that describes the task details
+     * in the text file.
+     */
     public static String toSave(Task t) {
         return(t.getType() + " > " + t.isDone + " > " + t.toStringToSave());
     }
-    // Save contents in program into text file
+
+    /**
+     * Saves all contents of the list in Duke to the text file.
+     */
     public static void saveFileContents() {
         try {
             FileWriter fw = new FileWriter(Messages.FILEPATH);
