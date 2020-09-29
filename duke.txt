@@ -1,0 +1,6 @@
+5
+T > false >  2t
+T > true >  braeed
+T > false >  buy milk
+T > true >  drink milk
+T > false >  eat stuff

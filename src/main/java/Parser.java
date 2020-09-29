@@ -16,33 +16,28 @@ public class Parser {
         while(true) {
             String keyCommand = sc.next();
             // Exit Command
-            if (keyCommand.equals("bye")) {
+            if (keyCommand.equalsIgnoreCase("bye")) {
                 Storage.saveFileContents();
                 Ui.printGoodbye();
                 break;
             } else {
-                // Check for other commands
-                switch (keyCommand) {
-                case ("find"):
+                if(keyCommand.equalsIgnoreCase("find")) {
                     String keyWord = sc.nextLine();
                     TaskList.findTask(keyWord);
-                    break;
-
-                case ("list"):
+                }
+                else if(keyCommand.equalsIgnoreCase("list")) {
                     Ui.listTasks();
-                    break;
-
-                case ("done"):
+                }
+                else if(keyCommand.equalsIgnoreCase("done")) {
                     String done = sc.nextLine();
                     TaskList.doneTask(done);
-                    break;
-
-                case ("delete"):
+                }
+                else if(keyCommand.equalsIgnoreCase("delete")) {
                     String delete = sc.nextLine();
                     TaskList.deleteTask(delete);
-                    break;
+                }
 
-                case ("todo"):
+                else if(keyCommand.equalsIgnoreCase("todo")) {
                     String description = sc.nextLine();
                     // Throw exception if description is empty
                     try {
@@ -53,9 +48,8 @@ public class Parser {
                     } catch (DukeException e) {
                         System.out.println(Messages.EMPTY_TODO_INPUT);
                     }
-                    break;
-
-                case ("deadline"):
+                }
+                else if(keyCommand.equalsIgnoreCase("deadline")) {
                     String desc = sc.nextLine();
                     try {
                         if (desc.equals("")) {
@@ -67,9 +61,8 @@ public class Parser {
                     } catch (DukeException e) {
                         System.out.println(Messages.EMPTY_DEADLINE_INPUT);
                     }
-                    break;
-
-                case ("event"):
+                }
+                else if(keyCommand.equalsIgnoreCase("event")) {
                     String event = sc.nextLine();
                     try {
                         if (event.equals("")) {
@@ -81,9 +74,7 @@ public class Parser {
                     } catch (DukeException e) {
                         System.out.println(Messages.EMPTY_EVENT_INPUT);
                     }
-                    break;
-
-                default:
+                } else {
                     sc.nextLine();
                     System.out.println(Messages.INVALID_INPUT);
                 }
