@@ -14,6 +14,11 @@ public class Parser {
             } else {
                 // Check for other commands
                 switch (keyCommand) {
+                case ("find"):
+                    String keyWord = sc.nextLine();
+                    TaskList.findTask(keyWord);
+                    break;
+
                 case ("list"):
                     Ui.listTasks();
                     break;

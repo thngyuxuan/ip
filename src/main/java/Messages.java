@@ -16,6 +16,8 @@ public class Messages {
     public static final String INVALID_DONE_INPUT = "Error! Did not specify which task is completed! (Command format: done <Task Number>)";
     public static final String EMPTY_DONE_INPUT = "Error! Task does not exist! Please check if task exists in list. (Use 'list' command to find out existing tasks)";
     public static final String INVALID_DONE_INPUT_OUT_OF_BOUNDS = "Error! Please check that you have input only numbers. (Command format: done <Task Number from 1 to 100>)";
+    public static final String EMPTY_FIND_LIST = "No such task exist in the list!";
+    public static final String EMPTY_FIND_INPUT = "Please specify keyword!";
 
     public static final String LIST_TASKS_MESSAGE = "Here are the tasks in your list:";
     public static final String ADDED_TASK_MESSAGE = "Got it. I've added this task:";
@@ -25,4 +27,5 @@ public class Messages {
     public static final String SAVE_SUCCESS_MESSAGE = "File saved successfully.";
     public static final String SAVE_FAILED_MESSAGE = "Error: File not found! (IOException)";
     public static final String MISSING_FILE_MESSAGE = "Error: File not found! New file created.";
+    public static final String FIND_TASK_MESSAGE = "Here are the matching tasks in your list:";
 }
