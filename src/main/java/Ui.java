@@ -1,3 +1,8 @@
+/**
+ * Class to handle the user's interaction wtih Duke.
+ * The functions to print messages are mostly here.
+ */
+
 public class Ui {
     // Print greeting message upon startup of program
     public static void printGreeting() {
@@ -16,6 +21,9 @@ public class Ui {
         System.out.println(Messages.EXIT_MESSAGE);
     }
 
+    /**
+     * Prints the messages when a new task is added.
+     */
     public static void addTaskMessages() {
         System.out.println(Messages.BORDER);
         System.out.println(Messages.ADDED_TASK_MESSAGE);
@@ -24,7 +32,10 @@ public class Ui {
         System.out.println(Messages.BORDER);
     }
 
-    // List all tasks stored
+    /**
+     * Prints the entire list when the list command
+     * is read.
+     */
     public static void listTasks() {
         System.out.println(Messages.LIST_TASKS_MESSAGE);
         System.out.println(Messages.BORDER);
@@ -34,6 +45,15 @@ public class Ui {
         System.out.println(Messages.BORDER);
     }
 
+    /**
+     * Prints the messages when a task is deleted from
+     * the list. It tells the user what task is being
+     * deleted and the number of tasks remaining.
+     * The argument task must be a string that represents
+     * the task that is being deleted.
+     *
+     * @param task
+     */
     public static void deleteTaskMessages(String task) {
         System.out.println(Messages.BORDER);
         System.out.println(Messages.DELETED_TASK_MESSAGE);
@@ -42,10 +62,18 @@ public class Ui {
         System.out.println(Messages.BORDER);
     }
 
+    /**
+     * Prints the message when Duke cannot
+     * locate the text file.
+     */
     public static void printMissingFile() {
         System.out.println(Messages.MISSING_FILE_MESSAGE);
     }
 
+    /**
+     * Prints the messages when the find command
+     * is read.
+     */
     public static void findTaskMessages() {
         System.out.println(Messages.BORDER);
         System.out.println(Messages.FIND_TASK_MESSAGE);
@@ -53,6 +81,15 @@ public class Ui {
 
     }
 
+    /**
+     * Prints the messages when a task is being marked
+     * as done. The argument task must be a string that
+     * represents the task that is being marked done.
+     *
+     * @param task a string that represents
+     *             the task that is being marked
+     *             as done
+     */
     public static void markDoneMessages(String task) {
         System.out.println(Messages.BORDER);
         System.out.println(Messages.MARK_AS_DONE_MESSAGE);
@@ -60,7 +97,13 @@ public class Ui {
         System.out.println(Messages.BORDER);
     }
 
-    // Prints error messages for invalid user input
+    /**
+     * Prints the error messages for invalid user inputs.
+     * The argument type specifies the type of invalid input
+     * error messages the function displays.
+     *
+     * @param type the type of error message to display
+     */
     public static void printInvalidInput(String type) {
         switch(type) {
         case "done":
@@ -74,7 +117,13 @@ public class Ui {
         }
     }
 
-    // Prints error messages for empty user input
+    /**
+     * Prints the error messages for empty user input.
+     * The argument type specifies the type of empty input
+     * error messages the function displays.
+     *
+     * @param type the type of error message to display
+     */
     public static void printEmptyInput(String type) {
         switch(type) {
         case "done":
@@ -86,6 +135,10 @@ public class Ui {
         }
     }
 
+    /**
+     * Prints out message for when there is no tasks found
+     * with user's 'find' keyword.
+     */
     public static void printEmptySearchList() {
         System.out.println(Messages.EMPTY_FIND_LIST);
     }

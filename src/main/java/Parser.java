@@ -1,7 +1,16 @@
-import Task.DukeException;
+/**
+ * Class to read the user's input and execute the respective commands.
+ */
+
+import task.DukeException;
 import java.util.Scanner;
 
 public class Parser {
+    /**
+     * Reads in the user input and determines whether
+     * it is a valid command. It then executes the
+     * respective functions.
+     */
     public static void parseAndExecute() {
         Scanner sc = new Scanner(System.in);
         while(true) {

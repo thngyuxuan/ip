@@ -1,3 +1,7 @@
+/**
+ * Class to hold the string constants for Duke.
+ */
+
 public class Messages {
     public static String FILEPATH = "duke.txt";
     // String constants in program

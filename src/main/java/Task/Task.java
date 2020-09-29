@@ -1,4 +1,9 @@
-package Task;
+/**
+ * Class to hold the 'Task' objects.
+ * Each object holds a String 'description', a Boolean 'isDone'
+ * Contains other functions such as getters.
+ */
+package task;
 
 public abstract class Task {
     protected String description;
