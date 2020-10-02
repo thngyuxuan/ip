@@ -86,6 +86,7 @@ Example of usage:
 Expected outcome:
 
 `Here are the tasks in your list:`
+
 `______________________________________________`
 
 `1.[T][✘] buy milk`
@@ -121,6 +122,7 @@ Example of usage:
 Expected outcome:
 
 `Here are the matching tasks in your list:`
+
 `______________________________________________`
 
 `1.[E][✘] CS2113 Lecture (at: COM1)`
